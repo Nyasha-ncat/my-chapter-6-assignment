@@ -70,7 +70,24 @@ for course in all_courses:
 # ============================================================
 # Step 3: Day Code Expansion
 # ============================================================
-
+        
+# Mapping dictionaries for expansion
+full_map = {"M": "Monday", "T": "Tuesday", "W": "Wednesday", "R": "Thursday", "F": "Friday"}
+short_map = {"M": "Mon", "T": "Tue", "W": "Wed", "R": "Thu", "F": "Fri"}
+        
+# Lists to hold the expanded strings
+expanded_full = []
+expanded_short = []
+        
+# We loop through each character in the days string.
+# .upper() ensures that 'm' or 'M' both work correctly.
+for char in days.upper():
+  if char in full_map:
+    expanded_full.append(full_map[char])
+    expanded_short.append(short_map[char])   
+# .join() combines the list items into a single string separated by "/"
+full_days = "/".join(expanded_full)
+short_days = "/".join(expanded_short)
 
 # ============================================================
 # Step 4: Time Standardization
