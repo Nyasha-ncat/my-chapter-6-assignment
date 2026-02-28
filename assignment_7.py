@@ -1,10 +1,11 @@
 """
 COMP 163 - Introduction to Programming
 Assignment: Chapter 7 - Course Schedule Formatter
-Name: [Your Full Name]
-GitHub Username: [Your Username]
-Date: [Submission Date]
-Description: [What your program does]
+Name: [Nyasha Chimombe]
+GitHub Username: [Nyasha-Ncat]
+Date: [2/27/2026]
+Description: [This program parses messy course registration data, cleans it using 
+             string methods, detects scheduling conflicts, and prints a formatted schedule.]
 AI Usage: [Describe any AI assistance OR write "None"]
 """
 
