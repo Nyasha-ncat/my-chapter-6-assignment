@@ -6,7 +6,7 @@ GitHub Username: [Nyasha-Ncat]
 Date: [2/27/2026]
 Description: [This program parses messy course registration data, cleans it using 
              string methods, detects scheduling conflicts, and prints a formatted schedule.]
-AI Usage: [Describe any AI assistance OR write "None"]
+AI Usage: [Used for formulatinf comments for the code and when I had allignment issues, and spacing issues when I was not getting full marks, itt helped me too. also with syntax errors i had.]
 """
 
 # ============================================================
