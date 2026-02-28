@@ -118,6 +118,36 @@ all_courses.append({
 # ============================================================
 # Step 5: Conflict Detection
 # ============================================================
+print("\n=== CONFLICT REPORT ===")
+conflicts_found = False
+
+#  used a nested loop to compare each course (i) with every subsequent course (j)
+for i in range(len(all_courses)):
+    for j in range(i + 1, len(all_courses)):
+        course1 = all_courses[i]
+        course2 = all_courses[j]
+        
+        # Check if they meet at the same time
+        if course1["time"] == course2["time"]:
+            # Check if they share any days
+            shared_days = []
+            
+            # Dictionary to help order the conflict message correctly
+            day_order = {"M": "Monday", "T": "Tuesday", "W": "Wednesday", "R": "Thursday", "F": "Friday"}
+            
+            # Look for common characters in the raw_days (e.g., "MW" and "WF" share "W")
+            for day_code in "MTWRF":
+                if day_code in course1["raw_days"] and day_code in course2["raw_days"]:
+                    shared_days.append(day_order[day_code])
+            
+            # If they share at least one day and the time is the same, it's a conflict
+            if shared_days:
+                conflicts_found = True
+                days_str = ", ".join(shared_days)
+                print(f"{course1['code']} and {course2['code']} conflict on {days_str} at {course1['time']}")
+
+if not conflicts_found:
+    print("No conflicts detected.") 
 
 
 # ============================================================
