@@ -167,4 +167,4 @@ Cleaning fixes raw input errors so the program can process it, while formatting 
 
 ## AI Usage
 
-Describe any AI assistance you used, or write "None."
+Used for formulatinf comments for the code and when I had allignment issues, and spacing issues when I was not getting full marks, itt helped me too. also with syntax errors i had.
