@@ -51,6 +51,21 @@ for course in all_courses:
 # Step 2: Title and Room Formatting
 # ============================================================
 
+    if len(parts) == 5:
+        code = parts[0].strip().upper()
+        
+        # .title() capitalizes the first letter of every word
+        title = parts[1].strip().title() 
+        
+        days = parts[2].strip() # We will handle days in Step 3
+        time = parts[3].strip() # We will handle time in Step 4
+        
+        # .title() ensures rooms like "ncat 101" become "Ncat 101"
+        room = parts[4].strip().title() 
+
+        # Store the cleaned data
+        all_courses.append([code, title, days, time, room])
+
 
 # ============================================================
 # Step 3: Day Code Expansion
