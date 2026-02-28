@@ -130,7 +130,7 @@ The days field requires you to process the string one character at a time rather
 than treating it as a whole. Why is that necessary? Could you have produced the
 same result with a single string method call instead of a loop? Explain your reasoning.
 
-*Your answer here.*
+I could not have produced the same result with a single string method because it wouldn't easily handle the logic of expanding multiple single characters and joining them with a forward slash in a single step.
 
 ---
 
@@ -141,7 +141,7 @@ How did you identify where one part ends and the other begins in your program?
 What would break in your solution if the input format changed — for example,
 if times were given as `9am` instead of `9:00am`?
 
-*Your answer here.*
+If the input changed to "9am" instead of "9:00am," my current solution would still correctly identify the "am" and convert it to "9 AM,"
 
 ---
 
@@ -152,9 +152,8 @@ all input has been collected. Why can't you check for conflicts as each course
 is entered, before the user types DONE? What data structure did you use to store
 the courses, and why was that a good choice for this comparison?
 
-*Your answer here.*
+I used a list of dictionaries to store the courses. This was a good choice because the list is an ordered collection that I can easily iterate through with nested loops, and the dictionaries allow me to access specific fields like course['time'] or course['raw_days'] by name, making the comparison logic clear and readable.
 
----
 
 **Question 4**
 
@@ -162,7 +161,7 @@ What is the difference between *cleaning* data and *formatting* data?
 Give one specific example of each from your own program and explain
 why the distinction matters.
 
-*Your answer here.*
+Cleaning fixes raw input errors so the program can process it, while formatting organizes clean data for the user. In my code, using .strip() and .upper() is cleaning because it standardizes messy input like "cs 163" into a uniform value. Using f-string width specifiers like :<10 is formatting because it ensures the output columns are perfectly aligned. This distinction matters because data must be cleaned and standardized first for logic like conflict detection to work accurately.
 
 ---
 
