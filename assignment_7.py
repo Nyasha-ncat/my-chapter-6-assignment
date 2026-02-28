@@ -92,7 +92,28 @@ short_days = "/".join(expanded_short)
 # ============================================================
 # Step 4: Time Standardization
 # ============================================================
+        
+# 1. Remove all spaces and convert to lowercase to make it predictable
+clean_time = time.replace(" ", "").lower()
+        
+# 2. Separate the "am/pm" from the numbers. 
+# We replace "am" with " AM" (with a space) and "pm" with " PM".
+clean_time = clean_time.replace("am", " AM").replace("pm", " PM")
+        
+# 3. Final cleanup: ensure the AM/PM is uppercase
+time = clean_time.upper()
 
+# IMPORTANT: Now that all fields are clean, we store them together.
+# We store both full_days and short_days for the different output sections.
+all_courses.append({
+  "code": code,
+  "title": title,
+  "full_days": full_days,
+  "short_days": short_days,
+  "time": time,
+  "room": room,
+  "raw_days": days.upper() # Keep raw days for conflict checking in Step 5
+})
 
 # ============================================================
 # Step 5: Conflict Detection
