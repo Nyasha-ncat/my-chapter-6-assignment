@@ -12,108 +12,67 @@ AI Usage: [Describe any AI assistance OR write "None"]
 # ============================================================
 # Step 1: Input Parsing & Course Code Formatting
 # ============================================================
-
-# List to store each course's data as a dictionary or sub-list
 all_courses = []
 
 print("Enter course data (format: code|title|days|time|room):")
 
 while True:
     user_input = input().strip()
-    
-    # Check for exit condition
     if user_input.upper() == "DONE":
         break
     
-    # Split the input into 5 parts based on the pipe character
-    # Using .strip() on each part to remove accidental extra spaces
     parts = user_input.split('|')
     
-    # Ensure the line has exactly 5 parts before processing
     if len(parts) == 5:
-        code = parts[0].strip().upper()  # Standardize code to uppercase
-        title = parts[1].strip()
-        days = parts[2].strip()
-        time = parts[3].strip()
-        room = parts[4].strip()
+        # Step 1: Parsing and Uppercasing Code
+        code = parts[0].strip().upper() 
         
-        # Store data in a list to use in later steps
-        all_courses.append([code, title, days, time, room])
+        # ============================================================
+        # Step 2: Title and Room Formatting
+        # ============================================================
+        # .title() ensures "intro to programming" -> "Intro To Programming"
+        title = parts[1].strip().title()
+        room = parts[4].strip().title()
+        
+        # ============================================================
+        # Step 3: Day Code Expansion
+        # ============================================================
+        days_raw = parts[2].strip().upper()
+        full_map = {"M": "Monday", "T": "Tuesday", "W": "Wednesday", "R": "Thursday", "F": "Friday"}
+        short_map = {"M": "Mon", "T": "Tue", "W": "Wed", "R": "Thu", "F": "Fri"}
+        
+        expanded_full = []
+        expanded_short = []
+        
+        # Loop through each character to expand day names
+        for char in days_raw:
+            if char in full_map:
+                expanded_full.append(full_map[char])
+                expanded_short.append(short_map[char])
+        
+        full_days = "/".join(expanded_full)
+        short_days = "/".join(expanded_short)
+
+        # ============================================================
+        # Step 4: Time Standardization
+        # ============================================================
+        # Strip spaces and normalize to "9:00 AM" format
+        time_clean = parts[3].strip().lower().replace(" ", "")
+        time_clean = time_clean.replace("am", " AM").replace("pm", " PM")
+        time_final = time_clean.upper()
+
+        # Save everything to the list as a dictionary
+        all_courses.append({
+            "code": code,
+            "title": title,
+            "full_days": full_days,
+            "short_days": short_days,
+            "time": time_final,
+            "room": room,
+            "raw_days": days_raw
+        })
     else:
         print("Invalid format. Please use: code|title|days|time|room")
-
-# Verification print for Step 1 (You can remove this after testing)
-for course in all_courses:
-    print(f"Parsed Code: {course[0]}")
-
-
-# ============================================================
-# Step 2: Title and Room Formatting
-# ============================================================
-
-    if len(parts) == 5:
-        code = parts[0].strip().upper()
-        
-        # .title() capitalizes the first letter of every word
-        title = parts[1].strip().title() 
-        
-        days = parts[2].strip() # We will handle days in Step 3
-        time = parts[3].strip() # We will handle time in Step 4
-        
-        # .title() ensures rooms like "ncat 101" become "Ncat 101"
-        room = parts[4].strip().title() 
-
-        # Store the cleaned data
-        all_courses.append([code, title, days, time, room])
-
-
-# ============================================================
-# Step 3: Day Code Expansion
-# ============================================================
-        
-# Mapping dictionaries for expansion
-full_map = {"M": "Monday", "T": "Tuesday", "W": "Wednesday", "R": "Thursday", "F": "Friday"}
-short_map = {"M": "Mon", "T": "Tue", "W": "Wed", "R": "Thu", "F": "Fri"}
-        
-# Lists to hold the expanded strings
-expanded_full = []
-expanded_short = []
-        
-# We loop through each character in the days string.
-# .upper() ensures that 'm' or 'M' both work correctly.
-for char in days.upper():
-  if char in full_map:
-    expanded_full.append(full_map[char])
-    expanded_short.append(short_map[char])   
-# .join() combines the list items into a single string separated by "/"
-full_days = "/".join(expanded_full)
-short_days = "/".join(expanded_short)
-
-# ============================================================
-# Step 4: Time Standardization
-# ============================================================
-        
-# 1. Remove all spaces and convert to lowercase to make it predictable
-clean_time = time.replace(" ", "").lower()
-        
-# 2. Separate the "am/pm" from the numbers. 
-# We replace "am" with " AM" (with a space) and "pm" with " PM".
-clean_time = clean_time.replace("am", " AM").replace("pm", " PM")
-        
-# 3. Final cleanup: ensure the AM/PM is uppercase
-time = clean_time.upper()
-
-# IMPORTANT: Now that all fields are clean, we store them together.
-# We store both full_days and short_days for the different output sections.
-all_courses.append({
-  "code": code,
-  "title": title,
-  "full_days": full_days,
-  "short_days": short_days,
-  "time": time,
-  "room": room,
-  "raw_days": days.upper() # Keep raw days for conflict checking in Step 5
-})
 
 # ============================================================
 # Step 5: Conflict Detection
@@ -121,40 +80,27 @@ all_courses.append({
 print("\n=== CONFLICT REPORT ===")
 conflicts_found = False
 
-#  used a nested loop to compare each course (i) with every subsequent course (j)
 for i in range(len(all_courses)):
     for j in range(i + 1, len(all_courses)):
-        course1 = all_courses[i]
-        course2 = all_courses[j]
+        c1, c2 = all_courses[i], all_courses[j]
         
-        # Check if they meet at the same time
-        if course1["time"] == course2["time"]:
-            # Check if they share any days
-            shared_days = []
+        if c1["time"] == c2["time"]:
+            shared = []
+            # Check days in standard order
+            for char, name in [("M","Monday"), ("T","Tuesday"), ("W","Wednesday"), ("R","Thursday"), ("F","Friday")]:
+                if char in c1["raw_days"] and char in c2["raw_days"]:
+                    shared.append(name)
             
-            # Dictionary to help order the conflict message correctly
-            day_order = {"M": "Monday", "T": "Tuesday", "W": "Wednesday", "R": "Thursday", "F": "Friday"}
-            
-            # Look for common characters in the raw_days (e.g., "MW" and "WF" share "W")
-            for day_code in "MTWRF":
-                if day_code in course1["raw_days"] and day_code in course2["raw_days"]:
-                    shared_days.append(day_order[day_code])
-            
-            # If they share at least one day and the time is the same, it's a conflict
-            if shared_days:
+            if shared:
                 conflicts_found = True
-                days_str = ", ".join(shared_days)
-                print(f"{course1['code']} and {course2['code']} conflict on {days_str} at {course1['time']}")
+                print(f"{c1['code']} and {c2['code']} conflict on {', '.join(shared)} at {c1['time']}")
 
 if not conflicts_found:
-    print("No conflicts detected.") 
-
+    print("No conflicts detected.")
 
 # ============================================================
 # Step 6: Full Output & Formatted Printing
 # ============================================================
-
-# 1. Individual Course Blocks
 print("\n=== AGGIE COURSE SCHEDULE ===")
 for index, course in enumerate(all_courses, start=1):
     print(f"\nCOURSE {index}:")
@@ -164,13 +110,13 @@ for index, course in enumerate(all_courses, start=1):
     print(f"  Time:  {course['time']}")
     print(f"  Room:  {course['room']}")
 
-# 2. Schedule Summary
 print("\n=== SCHEDULE SUMMARY ===")
 print(f"Total courses: {len(all_courses)}")
 
-# 3. Formatted For Printing (The Table)
-# Note: Use the short_days and f-string alignment specifiers here
 print("\n=== FORMATTED FOR PRINTING ===")
+for course in all_courses:
+    # Uses f-string width specifiers for alignment
+    print(f"{course['code']:<10} {course['title']:<25} {course['short_days']:<15} {course['time']:<10} {course['room']}")
 for course in all_courses:
     # < symbol aligns text to the left within a set number of spaces
     print(f"{course['code']:<10} {course['title']:<25} {course['short_days']:<15} {course['time']:<10} {course['room']}")
