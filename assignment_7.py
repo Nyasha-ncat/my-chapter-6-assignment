@@ -153,3 +153,24 @@ if not conflicts_found:
 # ============================================================
 # Step 6: Full Output & Formatted Printing
 # ============================================================
+
+# 1. Individual Course Blocks
+print("\n=== AGGIE COURSE SCHEDULE ===")
+for index, course in enumerate(all_courses, start=1):
+    print(f"\nCOURSE {index}:")
+    print(f"  Code:  {course['code']}")
+    print(f"  Title: {course['title']}")
+    print(f"  Days:  {course['full_days']}")
+    print(f"  Time:  {course['time']}")
+    print(f"  Room:  {course['room']}")
+
+# 2. Schedule Summary
+print("\n=== SCHEDULE SUMMARY ===")
+print(f"Total courses: {len(all_courses)}")
+
+# 3. Formatted For Printing (The Table)
+# Note: Use the short_days and f-string alignment specifiers here
+print("\n=== FORMATTED FOR PRINTING ===")
+for course in all_courses:
+    # < symbol aligns text to the left within a set number of spaces
+    print(f"{course['code']:<10} {course['title']:<25} {course['short_days']:<15} {course['time']:<10} {course['room']}")
